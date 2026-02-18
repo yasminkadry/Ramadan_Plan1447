@@ -1,0 +1,22 @@
+# Node modules (if needed later)
+node_modules/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Environment variables
+.env
+.env.local
+
+# Build outputs
+dist/
+build/
+
+# OS files
+Thumbs.db
+.DS_Store
