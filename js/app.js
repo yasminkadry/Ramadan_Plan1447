@@ -1,150 +1,74 @@
 // Local Storage Keys
 const STORAGE_KEY = 'ramadan_targets_2026';
-const CHECKLIST_KEY = 'ramadan_checklist_2026';
+const MATRIX_KEY = 'ramadan_matrix_2026';
+const NOTES_KEY = 'ramadan_day_notes_2026';
 
-// 10 Days of Ramadan Data
-const ramadanDays = [
+// 10 Days (for matrix and checklist)
+const ramadanDays = Array.from({ length: 10 }, (_, index) => ({
+    day: index + 1,
+    date: `${index + 1} رَمَضَانَ`
+}));
+
+// Matrix content based on the provided reference image
+const matrixConfig = {
+    redFlags: [
+        'الصَّلَاةُ (5/5)',
+        'الصِّومُ',
+        'أذكار الصباح/المساء',
+        'بر الوالدين',
+        'وِرْدُ القُرْآنِ',
+        'السُّحُورُ',
+        'القِيَامُ',
+        'الوِتْرُ',
+        'درس دينيٌّ',
+    ],
+    boosters: [
+        'ذِكْرٌ - إِفْطَارُ صَائِمٍ - صَدَقَةٌ - صِلَةُ الرَّحِمِ - إِلَخْ'
+    ],
+    helpers: [
+        'الدُّعَاءُ - الشُّكْرُ - صُحْبَةٌ صَالِحَةٌ'
+    ],
+    distractors: [
+        'هَاتِفٌ',
+        'تِلْفَازٌ',
+        'صُحْبَةٌ سَيِّئَةٌ',
+        'إِلْهَاءٌ عَشْوَائِيٌّ'
+    ]
+};
+
+const matrixGroups = [
     {
-        day: 1,
-        date: '1 رمضان',
-        quran: 'سورة الفاتحة',
-        adhkar: 'سبحان الله وبحمده 100 مرة',
-        sunnah: 'السحور قبل الفجر',
-        fara2id: 'الإمساك عن الطعام والشراب',
-        items: [
-            { category: 'القرآن', text: 'تلاوة سورة الفاتحة' },
-            { category: 'الأذكار', text: 'سبحان الله وبحمده 100 مرة' },
-            { category: 'السنن', text: 'السحور قبل الفجر' },
-            { category: 'الفرائض', text: 'الإمساك عن الطعام والشراب' }
-        ]
+        id: 'red',
+        title: 'خُطُوطٌ حَمْرَاءُ (ضَرُورِيَّاتٌ)',
+        items: matrixConfig.redFlags,
+        tableCellClass: 'cell-red',
+        checklistClass: 'check-red'
     },
     {
-        day: 2,
-        date: '2 رمضان',
-        quran: 'سورة البقرة - الآيات الأولى',
-        adhkar: 'استغفر الله العظيم 100 مرة',
-        sunnah: 'صلاة التراويح',
-        fara2id: 'الصوم من الفجر إلى المغرب',
-        items: [
-            { category: 'القرآن', text: 'تلاوة من سورة البقرة' },
-            { category: 'الأذكار', text: 'استغفر الله العظيم 100 مرة' },
-            { category: 'السنن', text: 'صلاة التراويح' },
-            { category: 'الفرائض', text: 'الصوم من الفجر إلى المغرب' }
-        ]
+        id: 'booster',
+        title: 'وَتَزَوَّدُوا',
+        items: matrixConfig.boosters,
+        tableCellClass: 'cell-purple',
+        checklistClass: 'check-purple'
     },
     {
-        day: 3,
-        date: '3 رمضان',
-        quran: 'آيات من سورة البقرة',
-        adhkar: 'اللهم إني أسألك العافية',
-        sunnah: 'الدعاء في الثلث الأخير',
-        fara2id: 'الإفطار على التمر',
-        items: [
-            { category: 'القرآن', text: 'تلاوة آيات من سورة البقرة' },
-            { category: 'الأذكار', text: 'اللهم إني أسألك العافية' },
-            { category: 'السنن', text: 'الدعاء في الثلث الأخير' },
-            { category: 'الفرائض', text: 'الإفطار على التمر' }
-        ]
+        id: 'helper',
+        title: 'مُعِينَاتٌ',
+        items: matrixConfig.helpers,
+        tableCellClass: 'cell-blue',
+        checklistClass: 'check-blue'
     },
     {
-        day: 4,
-        date: '4 رمضان',
-        quran: 'سورة آل عمران - آيات الصوم',
-        adhkar: 'لا حول ولا قوة إلا بالله',
-        sunnah: 'قيام الليل',
-        fara2id: 'اجتناب المحرمات',
-        items: [
-            { category: 'القرآن', text: 'تلاوة من سورة آل عمران' },
-            { category: 'الأذكار', text: 'لا حول ولا قوة إلا بالله' },
-            { category: 'السنن', text: 'قيام الليل' },
-            { category: 'الفرائض', text: 'اجتناب المحرمات' }
-        ]
-    },
-    {
-        day: 5,
-        date: '5 رمضان',
-        quran: 'سورة النساء - الآيات الأولى',
-        adhkar: 'سبحان الله وتعالى',
-        sunnah: 'الإكثار من الصدقة',
-        fara2id: 'عدم شرب الماء',
-        items: [
-            { category: 'القرآن', text: 'تلاوة من سورة النساء' },
-            { category: 'الأذكار', text: 'سبحان الله وتعالى عما يقولون' },
-            { category: 'السنن', text: 'الإكثار من الصدقة' },
-            { category: 'الفرائض', text: 'عدم شرب الماء' }
-        ]
-    },
-    {
-        day: 6,
-        date: '6 رمضان',
-        quran: 'سورة المائدة - آيات الطعام',
-        adhkar: 'يا رب يا أعز يا أكرم',
-        sunnah: 'قراءة القرآن بتدبر',
-        fara2id: 'الامتناع عن الطيب',
-        items: [
-            { category: 'القرآن', text: 'تلاوة من سورة المائدة' },
-            { category: 'الأذكار', text: 'يا رب يا أعز يا أكرم' },
-            { category: 'السنن', text: 'قراءة القرآن بتدبر' },
-            { category: 'الفرائض', text: 'الامتناع عن الطيب' }
-        ]
-    },
-    {
-        day: 7,
-        date: '7 رمضان',
-        quran: 'سورة الأنعام - آيات التقوى',
-        adhkar: 'اللهم اجعلنا من المتقين',
-        sunnah: 'الدعاء المستجاب',
-        fara2id: 'السكوت عما لا ينفع',
-        items: [
-            { category: 'القرآن', text: 'تلاوة من سورة الأنعام' },
-            { category: 'الأذكار', text: 'اللهم اجعلنا من المتقين' },
-            { category: 'السنن', text: 'الدعاء المستجاب' },
-            { category: 'الفرائض', text: 'السكوت عما لا ينفع' }
-        ]
-    },
-    {
-        day: 8,
-        date: '8 رمضان',
-        quran: 'سورة الأعراف - آيات التوبة',
-        adhkar: 'تب إلي يا الله',
-        sunnah: 'محاسبة النفس',
-        fara2id: 'حفظ الجوارح',
-        items: [
-            { category: 'القرآن', text: 'تلاوة من سورة الأعراف' },
-            { category: 'الأذكار', text: 'تب إلي يا الله' },
-            { category: 'السنن', text: 'محاسبة النفس' },
-            { category: 'الفرائض', text: 'حفظ الجوارح' }
-        ]
-    },
-    {
-        day: 9,
-        date: '9 رمضان',
-        quran: 'سورة الأنفال - آيات الحرم',
-        adhkar: 'اللهم وسع على المسلمين',
-        sunnah: 'التسبيح والتكبير',
-        fara2id: 'الوفاء بالعهد',
-        items: [
-            { category: 'القرآن', text: 'تلاوة من سورة الأنفال' },
-            { category: 'الأذكار', text: 'اللهم وسع على المسلمين' },
-            { category: 'السنن', text: 'التسبيح والتكبير' },
-            { category: 'الفرائض', text: 'الوفاء بالعهد' }
-        ]
-    },
-    {
-        day: 10,
-        date: '10 رمضان',
-        quran: 'سورة التوبة - آيات المغفرة',
-        adhkar: 'اغفر لنا وارحمنا',
-        sunnah: 'الشكر على إتمام الأيام',
-        fara2id: 'عدم إفطار يوم متعمداً',
-        items: [
-            { category: 'القرآن', text: 'تلاوة من سورة التوبة' },
-            { category: 'الأذكار', text: 'اغفر لنا وارحمنا يا الله' },
-            { category: 'السنن', text: 'الشكر على إتمام الأيام' },
-            { category: 'الفرائض', text: 'عدم إفطار يوم متعمداً' }
-        ]
+        id: 'distractor',
+        title: 'مُشَتِّتَاتٌ',
+        items: matrixConfig.distractors,
+        tableCellClass: 'cell-yellow',
+        checklistClass: 'check-yellow'
     }
 ];
+
+const MATRIX_TOTAL_ITEMS = matrixGroups.reduce((sum, group) => sum + group.items.length, 0);
+const noteSaveTimers = {};
 
 // DOM Elements
 const targetInput = document.getElementById('targetInput');
@@ -153,12 +77,12 @@ const targetsList = document.getElementById('targetsList');
 const clearAllBtn = document.getElementById('clearAllBtn');
 const charCount = document.getElementById('charCount');
 const calendarChecklist = document.getElementById('calendarChecklist');
-const first10DaysTable = document.getElementById('first10DaysTable');
+const dailyMatrixTable = document.getElementById('dailyMatrixTable');
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadTargets();
-    renderFirst10DaysTable();
+    renderDailyMatrix();
     renderChecklistCalendar();
     attachEventListeners();
 });
@@ -167,8 +91,8 @@ document.addEventListener('DOMContentLoaded', () => {
 function attachEventListeners() {
     addBtn.addEventListener('click', addTarget);
     clearAllBtn.addEventListener('click', clearAllTargets);
-    targetInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') {
+    targetInput.addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') {
             addTarget();
         }
     });
@@ -177,8 +101,7 @@ function attachEventListeners() {
 
 // Update Character Count
 function updateCharCount() {
-    const length = targetInput.value.length;
-    charCount.textContent = length;
+    charCount.textContent = targetInput.value.length;
 }
 
 // Add Target
@@ -186,36 +109,33 @@ function addTarget() {
     const targetText = targetInput.value.trim();
 
     if (targetText === '') {
-        showNotification('الرجاء إدخال هدفك أولاً', 'error');
+        showNotification('الرَّجَاءُ إِدْخَالُ هَدَفِكَ أَوَّلًا', 'error');
         return;
     }
 
-    let targets = getTargets();
+    const targets = getTargets();
 
-    const newTarget = {
+    targets.push({
         id: Date.now(),
         text: targetText,
-        completed: false,
         createdAt: new Date().toLocaleString('ar-SA')
-    };
+    });
 
-    targets.push(newTarget);
     saveTargets(targets);
 
     targetInput.value = '';
     charCount.textContent = '0';
 
     loadTargets();
-    showNotification('تم إضافة الهدف بنجاح ✓', 'success');
+    showNotification('تَمَّتْ إِضَافَةُ الهَدَفِ بِنَجَاحٍ ✓', 'success');
 }
 
-// Get Targets from Local Storage
+// Targets Storage
 function getTargets() {
     const targets = localStorage.getItem(STORAGE_KEY);
     return targets ? JSON.parse(targets) : [];
 }
 
-// Save Targets to Local Storage
 function saveTargets(targets) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(targets));
 }
@@ -223,14 +143,13 @@ function saveTargets(targets) {
 // Load and Display Targets
 function loadTargets() {
     const targets = getTargets();
-
     targetsList.innerHTML = '';
 
     if (targets.length === 0) {
         targetsList.innerHTML = `
             <div class="col-12">
                 <div class="alert alert-light border rounded-4 mb-0 text-center">
-                    <i class="fas fa-lightbulb me-2"></i>لا توجد أهداف بعد. ابدأ بإضافة هدفك الأول!
+                    <i class="fas fa-lightbulb me-2"></i>لَا تُوجَدُ أَهْدَافٌ بَعْدُ. ابْدَأْ بِإِضَافَةِ هَدَفِكَ الأَوَّلِ!
                 </div>
             </div>
         `;
@@ -241,12 +160,10 @@ function loadTargets() {
     clearAllBtn.disabled = false;
 
     targets.forEach((target) => {
-        const targetElement = createTargetElement(target);
-        targetsList.appendChild(targetElement);
+        targetsList.appendChild(createTargetElement(target));
     });
 }
 
-// Create Target Element
 function createTargetElement(target) {
     const col = document.createElement('div');
     col.className = 'col-12 col-md-6 col-lg-4';
@@ -255,12 +172,12 @@ function createTargetElement(target) {
             <div class="card-body d-flex flex-column gap-3">
                 <div class="d-flex align-items-start justify-content-between gap-2">
                     <p class="mb-0" style="line-height:1.7;">${escapeHtml(target.text)}</p>
-                    <button class="btn btn-sm btn-outline-danger flex-shrink-0" onclick="deleteTarget(${target.id})" aria-label="حذف" title="حذف هذا الهدف">
+                    <button class="btn btn-sm btn-outline-danger flex-shrink-0" onclick="deleteTarget(${target.id})" aria-label="حَذْفٌ" title="حَذْفُ هٰذَا الهَدَفِ">
                         <i class="fa-solid fa-trash"></i>
                     </button>
                 </div>
                 <div class="mt-auto">
-                    <small class="text-muted"><i class="fas fa-clock me-1"></i>أُضيف في: ${escapeHtml(target.createdAt)}</small>
+                    <small class="text-muted"><i class="fas fa-clock me-1"></i>أُضِيفَ فِي: ${escapeHtml(target.createdAt)}</small>
                 </div>
             </div>
         </div>
@@ -268,156 +185,303 @@ function createTargetElement(target) {
     return col;
 }
 
-// Delete Target
 function deleteTarget(id) {
-    if (confirm('هل تريد حذف هذا الهدف؟')) {
-        let targets = getTargets();
-        targets = targets.filter(target => target.id !== id);
-        saveTargets(targets);
-        loadTargets();
-        showNotification('تم حذف الهدف بنجاح ✓', 'success');
+    if (!confirm('هَلْ تُرِيدُ حَذْفَ هٰذَا الهَدَفِ؟')) {
+        return;
     }
+
+    const targets = getTargets().filter((target) => target.id !== id);
+    saveTargets(targets);
+    loadTargets();
+    showNotification('تَمَّ حَذْفُ الهَدَفِ بِنَجَاحٍ ✓', 'success');
 }
 
-// Clear All Targets
 function clearAllTargets() {
-    if (confirm('هل تريد حذف جميع الأهداف؟ هذا الإجراء لا يمكن التراجع عنه.')) {
-        localStorage.removeItem(STORAGE_KEY);
-        loadTargets();
-        showNotification('تم حذف جميع الأهداف بنجاح ✓', 'success');
+    if (!confirm('هَلْ تُرِيدُ حَذْفَ جَمِيعِ الأَهْدَافِ؟ هٰذَا الإِجْرَاءُ لَا يُمْكِنُ التَّرَاجُعُ عَنْهُ.')) {
+        return;
     }
+
+    localStorage.removeItem(STORAGE_KEY);
+    loadTargets();
+    showNotification('تَمَّ حَذْفُ جَمِيعِ الأَهْدَافِ بِنَجَاحٍ ✓', 'success');
 }
 
-// Render First 10 Days Table
-function renderFirst10DaysTable() {
-    first10DaysTable.innerHTML = '';
+// Matrix Rendering
+function renderDailyMatrix() {
+    if (!dailyMatrixTable) {
+        return;
+    }
 
-    ramadanDays.forEach((day) => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>
-                <div class="d-flex align-items-center gap-2">
-                    <span class="day-badge">${day.day}</span>
-                    <span class="fw-bold" style="font-family:'Cairo',serif;">${day.date}</span>
-                </div>
-            </td>
-            <td>
-                <span class="category-badge">القرآن</span><br>
-                ${escapeHtml(day.quran)}
-            </td>
-            <td>
-                <span class="category-badge">الأذكار</span><br>
-                ${escapeHtml(day.adhkar)}
-            </td>
-            <td>
-                <span class="category-badge">السنن</span><br>
-                ${escapeHtml(day.sunnah)}
-            </td>
-            <td>
-                <span class="category-badge">الفرائض</span><br>
-                ${escapeHtml(day.fara2id)}
-            </td>
+    const thead = `
+        <thead>
+            <tr>
+                <th class="group-day" rowspan="2">اليَوْمُ</th>
+                <th class="group-red" colspan="${matrixConfig.redFlags.length}">خُطُوطٌ حَمْرَاءُ (ضَرُورِيَّاتٌ)</th>
+                <th class="group-purple" rowspan="2">
+                    وَتَزَوَّدُوا
+                    <small>${escapeHtml(matrixConfig.boosters[0])}</small>
+                </th>
+                <th class="group-blue" rowspan="2">
+                    مُعِينَاتٌ
+                    <small>${escapeHtml(matrixConfig.helpers[0])}</small>
+                </th>
+                <th class="group-yellow" colspan="${matrixConfig.distractors.length}">مُشَتِّتَاتٌ (يومى بدون)</th>
+            </tr>
+            <tr>
+                ${matrixConfig.redFlags.map((item) => `<th class="sub-red rotate">${escapeHtml(item)}</th>`).join('')}
+                ${matrixConfig.distractors.map((item) => `<th class="sub-yellow rotate">${escapeHtml(item)}</th>`).join('')}
+            </tr>
+        </thead>
+    `;
+
+    const rows = ramadanDays.map((day) => {
+        const redCells = matrixConfig.redFlags.map((_, index) =>
+            buildMatrixCell(day.day, 'red', index, 'cell-red')
+        ).join('');
+
+        const boosterCell = buildMatrixCell(day.day, 'booster', 0, 'cell-purple');
+        const helperCell = buildMatrixCell(day.day, 'helper', 0, 'cell-blue');
+
+        const distractorCells = matrixConfig.distractors.map((_, index) =>
+            buildMatrixCell(day.day, 'distractor', index, 'cell-yellow')
+        ).join('');
+
+        return `
+            <tr>
+                <td class="day-col"><span class="day-badge">${day.day}</span></td>
+                ${redCells}
+                ${boosterCell}
+                ${helperCell}
+                ${distractorCells}
+            </tr>
         `;
-        first10DaysTable.appendChild(row);
-    });
+    }).join('');
+
+    dailyMatrixTable.innerHTML = `${thead}<tbody>${rows}</tbody>`;
+
+    attachMatrixToggleEvents(dailyMatrixTable, '.matrix-cell');
 }
 
-// Render Checklist Calendar
+function buildMatrixCell(day, group, index, className) {
+    const key = getMatrixKey(day, group, index);
+    const isActive = getMatrixStatus(key);
+
+    return `
+        <td class="${className}">
+            <button
+                type="button"
+                class="matrix-cell ${isActive ? 'is-active' : ''}"
+                data-matrix-key="${key}"
+                aria-pressed="${isActive}"
+                aria-label="تَحْدِيثُ حَالَةِ اليَوْمِ ${day}"
+            >
+                <span class="matrix-mark">✓</span>
+            </button>
+        </td>
+    `;
+}
+
+// Checklist Rendering (same data as matrix) + Daily Notes
 function renderChecklistCalendar() {
     calendarChecklist.innerHTML = '';
 
     ramadanDays.forEach((day) => {
         const col = document.createElement('div');
-        col.className = 'col-12 col-lg-6';
+        col.className = 'col-12 col-xl-6';
 
         const card = document.createElement('div');
-        card.className = 'card border-0 shadow-sm rounded-4 h-100 overflow-hidden';
+        card.className = 'card border-0 shadow-sm rounded-4 h-100 overflow-hidden checklist-day-card';
 
-        const header = document.createElement('div');
-        header.className = 'card-header bg-primary text-white border-0 py-3';
-        header.innerHTML = `
-            <div class="d-flex align-items-center justify-content-between">
-                <div class="fw-bold" style="font-family:'Cairo',serif;">
-                    <i class="fas fa-calendar-day me-2"></i>اليوم ${day.day}
+        card.innerHTML = `
+            <div class="card-header text-white border-0 py-3 d-flex align-items-center justify-content-between" style="background: linear-gradient(90deg, #4a148c, #724283);">
+                <div class="fw-bold">
+                    <i class="fas fa-calendar-day me-2"></i>اليَوْمُ ${day.day}
                 </div>
-                <span class="badge text-bg-warning">${day.date}</span>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge text-bg-warning">${escapeHtml(day.date)}</span>
+                    <span class="badge text-bg-light text-dark" data-day-progress="${day.day}">${countDayProgress(day.day)}/${MATRIX_TOTAL_ITEMS}</span>
+                </div>
+            </div>
+            <div class="card-body p-3 p-md-4 d-grid gap-3">
+                ${renderChecklistGroup(day.day, matrixGroups[0])}
+                ${renderChecklistGroup(day.day, matrixGroups[1])}
+                ${renderChecklistGroup(day.day, matrixGroups[2])}
+                ${renderChecklistGroup(day.day, matrixGroups[3])}
+                <section class="day-note-wrap">
+                    <label class="day-note-label" for="day-note-${day.day}">مُلَاحَظَاتُ اليَوْمِ</label>
+                    <textarea id="day-note-${day.day}" class="day-note" data-day-note="${day.day}" rows="3" placeholder="اُكْتُبْ مُلَاحَظَةً مُخْتَصَرَةً...">${escapeHtml(getDayNote(day.day))}</textarea>
+                    <small class="text-muted day-note-status" data-note-status="${day.day}">مَحْفُوظٌ</small>
+                </section>
             </div>
         `;
 
-        const body = document.createElement('div');
-        body.className = 'card-body p-3 p-md-4';
-
-        const list = document.createElement('div');
-        list.className = 'vstack gap-3';
-
-        day.items.forEach((item, index) => {
-            const itemId = `day-${day.day}-item-${index}`;
-            const itemDiv = document.createElement('div');
-            itemDiv.className = 'form-check d-flex align-items-start gap-2';
-
-            const isChecked = getChecklistStatus(day.day, index);
-
-            itemDiv.innerHTML = `
-                <input
-                    class="form-check-input mt-1"
-                    type="checkbox"
-                    id="${itemId}"
-                    ${isChecked ? 'checked' : ''}
-                    onchange="saveChecklistStatus(${day.day}, ${index}, this.checked)"
-                >
-                <label class="form-check-label flex-grow-1" for="${itemId}" style="line-height:1.7;">
-                    <span class="badge text-bg-light border text-dark me-1">${escapeHtml(item.category)}</span>
-                    ${escapeHtml(item.text)}
-                </label>
-            `;
-
-            list.appendChild(itemDiv);
-        });
-
-        body.appendChild(list);
-        card.appendChild(header);
-        card.appendChild(body);
         col.appendChild(card);
         calendarChecklist.appendChild(col);
     });
+
+    attachMatrixToggleEvents(calendarChecklist, '.check-item');
+    attachDayNoteEvents();
 }
 
-// Get Checklist Status
-function getChecklistStatus(day, itemIndex) {
-    const checklist = localStorage.getItem(CHECKLIST_KEY);
-    if (!checklist) return false;
-    
-    const data = JSON.parse(checklist);
-    return data[`${day}-${itemIndex}`] === true;
+function renderChecklistGroup(day, group) {
+    return `
+        <section class="check-group ${group.checklistClass}">
+            <h3 class="check-group-title">${escapeHtml(group.title)}</h3>
+            <div class="check-items">
+                ${group.items.map((item, index) => renderChecklistItem(day, group.id, index, item, group.checklistClass)).join('')}
+            </div>
+        </section>
+    `;
 }
 
-// Save Checklist Status
-function saveChecklistStatus(day, itemIndex, isChecked) {
-    let checklist = {};
-    const stored = localStorage.getItem(CHECKLIST_KEY);
-    
-    if (stored) {
-        checklist = JSON.parse(stored);
+function renderChecklistItem(day, group, index, label, sectionClass) {
+    const key = getMatrixKey(day, group, index);
+    const isDone = getMatrixStatus(key);
+
+    return `
+        <button
+            type="button"
+            class="check-item ${sectionClass} ${isDone ? 'is-done' : ''}"
+            data-matrix-key="${key}"
+            aria-pressed="${isDone}"
+            title="${escapeHtml(label)}"
+        >
+            <span class="check-item-text">${escapeHtml(label)}</span>
+            <span class="check-item-mark">✓</span>
+        </button>
+    `;
+}
+
+// Matrix interactions
+function attachMatrixToggleEvents(root, selector) {
+    root.querySelectorAll(selector).forEach((button) => {
+        button.addEventListener('click', () => {
+            const key = button.dataset.matrixKey;
+            toggleMatrixStatus(key);
+        });
+    });
+}
+
+function toggleMatrixStatus(key) {
+    const next = !getMatrixStatus(key);
+    setMatrixStatus(key, next);
+    syncMatrixStateForKey(key, next);
+    updateDayProgress(getDayFromKey(key));
+}
+
+function syncMatrixStateForKey(key, isActive) {
+    document.querySelectorAll(`[data-matrix-key="${key}"]`).forEach((element) => {
+        element.classList.toggle('is-active', isActive);
+        element.classList.toggle('is-done', isActive);
+        element.classList.add('pop-done');
+        element.setAttribute('aria-pressed', String(isActive));
+
+        setTimeout(() => {
+            element.classList.remove('pop-done');
+        }, 220);
+    });
+}
+
+function updateDayProgress(day) {
+    const progress = `${countDayProgress(day)}/${MATRIX_TOTAL_ITEMS}`;
+    document.querySelectorAll(`[data-day-progress="${day}"]`).forEach((badge) => {
+        badge.textContent = progress;
+    });
+}
+
+function countDayProgress(day) {
+    let completed = 0;
+
+    matrixGroups.forEach((group) => {
+        group.items.forEach((_, index) => {
+            if (getMatrixStatus(getMatrixKey(day, group.id, index))) {
+                completed += 1;
+            }
+        });
+    });
+
+    return completed;
+}
+
+function getDayFromKey(key) {
+    return Number(key.split('-')[0]);
+}
+
+function getMatrixKey(day, group, index) {
+    return `${day}-${group}-${index}`;
+}
+
+// Daily Notes
+function attachDayNoteEvents() {
+    calendarChecklist.querySelectorAll('.day-note').forEach((textarea) => {
+        textarea.addEventListener('input', () => {
+            const day = Number(textarea.dataset.dayNote);
+            setDayNote(day, textarea.value);
+            setDayNoteStatus(day, 'جَارِي الحِفْظُ...');
+
+            if (noteSaveTimers[day]) {
+                clearTimeout(noteSaveTimers[day]);
+            }
+
+            noteSaveTimers[day] = setTimeout(() => {
+                setDayNoteStatus(day, 'تَمَّ الحِفْظُ');
+            }, 320);
+        });
+    });
+}
+
+function setDayNoteStatus(day, text) {
+    const status = calendarChecklist.querySelector(`[data-note-status="${day}"]`);
+    if (status) {
+        status.textContent = text;
     }
-    
-    checklist[`${day}-${itemIndex}`] = isChecked;
-    localStorage.setItem(CHECKLIST_KEY, JSON.stringify(checklist));
-    showNotification('تم تحديث التقدم ✓', 'success');
 }
 
-// Escape HTML to prevent XSS
+function getNotesData() {
+    const stored = localStorage.getItem(NOTES_KEY);
+    return stored ? JSON.parse(stored) : {};
+}
+
+function getDayNote(day) {
+    const data = getNotesData();
+    return data[day] || '';
+}
+
+function setDayNote(day, noteText) {
+    const data = getNotesData();
+    data[day] = noteText;
+    localStorage.setItem(NOTES_KEY, JSON.stringify(data));
+}
+
+// Matrix storage
+function getMatrixData() {
+    const stored = localStorage.getItem(MATRIX_KEY);
+    return stored ? JSON.parse(stored) : {};
+}
+
+function getMatrixStatus(key) {
+    const data = getMatrixData();
+    return data[key] === true;
+}
+
+function setMatrixStatus(key, isActive) {
+    const data = getMatrixData();
+    data[key] = isActive;
+    localStorage.setItem(MATRIX_KEY, JSON.stringify(data));
+}
+
+// Utility
 function escapeHtml(text) {
     const div = document.createElement('div');
     div.textContent = text;
     return div.innerHTML;
 }
 
-// Show Notification
 function showNotification(message, type = 'info') {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.textContent = message;
-    
+
     Object.assign(notification.style, {
         position: 'fixed',
         top: '20px',
@@ -430,7 +494,7 @@ function showNotification(message, type = 'info') {
         animation: 'slideIn 0.3s ease',
         maxWidth: '400px',
         wordWrap: 'break-word',
-        fontFamily: "'Poppins', sans-serif",
+        fontFamily: "'Marhey', sans-serif",
         boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
     });
 
@@ -452,10 +516,3 @@ function showNotification(message, type = 'info') {
         notification.remove();
     }, 3000);
 }
-
-// Load on page load
-window.addEventListener('load', () => {
-    loadTargets();
-    renderFirst10DaysTable();
-    renderChecklistCalendar();
-});

@@ -1,0 +1,394 @@
+*{
+    font-family: "Marhey", sans-serif;
+    }
+body { 
+    background: #fbf7f2; 
+
+}
+h1, h2, h3, h4, h5, h6, .hero-title, [style*="font-family:'Marhey'"] {
+    font-weight: 700;
+}
+.hero-bg { 
+    background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%); 
+}
+.glass { 
+    background: rgba(255,255,255,.08); 
+    backdrop-filter: blur(10px); 
+}
+
+.hero-goals-banner {
+    position: relative;
+    top: 30px;
+    overflow: hidden;
+    border-radius: 20px;
+    width: 50%;
+    min-height: 600px;  /* 🔥 smaller height */
+    border-top: 1px solid rgba(255, 255, 255, 0.26);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.26);
+    margin: 0 auto 10px auto;
+    box-shadow: 0 18px 38px rgba(9, 27, 42, 0.35);
+    background-color: rgba(255, 255, 255, 0.08);
+
+    background-image: url("../Assets/favicon_hero.png");
+    background-repeat: no-repeat;
+    background-size: cover;   /* ✅ shows full image height */
+    background-position: center;
+
+    animation: bannerFloat 2s ease-in-out infinite, 
+               bannerPulse 2s ease-in-out infinite;
+}
+
+
+.hero-goals-banner::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 45%, rgba(255, 255, 255, 0.24), rgba(255, 255, 255, 0));
+    pointer-events: none;
+}
+
+@keyframes bannerFloat {
+    0% { background-position: center 56%; }
+    50% { background-position: center 48%; }
+    100% { background-position: center 56%; }
+}
+
+@keyframes bannerPulse {
+    0% { box-shadow: 0 18px 38px rgba(9, 27, 42, 0.28); }
+    50% { box-shadow: 0 22px 44px rgba(9, 27, 42, 0.42); }
+    100% { box-shadow: 0 18px 38px rgba(9, 27, 42, 0.28); }
+}
+.table-first-10 {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.table-first-10 thead th {
+    background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);
+    color: white;
+    padding: 12px 15px;
+    font-weight: 600;
+    border: none;
+}
+.table-first-10 thead th:first-child {
+    border-radius: 8px 0 0 0;
+}
+.table-first-10 thead th:last-child {
+    border-radius: 0 8px 0 0;
+}
+.table-first-10 tbody td {
+    padding: 12px 15px;
+    border: 1px solid #e8dcc4;
+    background-color: white;
+}
+.table-first-10 tbody tr:hover {
+    background-color: #fdf6f0;
+}
+.table-first-10 tbody tr:last-child td:first-child {
+    border-radius: 0 0 0 8px;
+}
+.table-first-10 tbody tr:last-child td:last-child {
+    border-radius: 0 0 8px 0;
+}
+.day-badge {
+    display: inline-flex;
+    width: 35px;
+    height: 35px;
+    background: linear-gradient(135deg, #1a3a52 0%, #2d5f8d 100%);
+    color: white;
+    border-radius: 50%;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    margin-left: 10px;
+}
+.category-badge {
+    display: inline-block;
+    background-color: #f39c12;
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    margin-bottom: 5px;
+}
+
+.daily-matrix-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 8px;
+    min-width: 980px;
+}
+
+.daily-matrix-table th,
+.daily-matrix-table td {
+    border: 0;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.daily-matrix-table thead th {
+    color: #fff;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 10px 8px;
+}
+
+.daily-matrix-table .group-day {
+    background: #1f6a86;
+    width: 64px;
+}
+
+.daily-matrix-table .group-red {
+    background: #c94e57;
+}
+
+.daily-matrix-table .group-purple {
+    background: #6f66a9;
+    min-width: 220px;
+}
+
+.daily-matrix-table .group-blue {
+    background: #3c88bf;
+    min-width: 180px;
+}
+
+.daily-matrix-table .group-yellow {
+    background: #e2b13f;
+}
+
+.daily-matrix-table .group-purple small,
+.daily-matrix-table .group-blue small {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    line-height: 1.5;
+}
+
+.daily-matrix-table .sub-red {
+    background: #e35f69;
+}
+
+.daily-matrix-table .sub-yellow {
+    background: #eac666;
+}
+
+.daily-matrix-table .rotate {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    /* white-space: nowrap; */
+    height: 96px;
+    min-width: 42px;
+    padding: 8px 4px;
+}
+
+.daily-matrix-table .day-col {
+    width: 64px;
+    background: transparent;
+}
+
+.daily-matrix-table .cell-red,
+.daily-matrix-table .cell-purple,
+.daily-matrix-table .cell-blue,
+.daily-matrix-table .cell-yellow {
+    padding: 0;
+}
+
+.daily-matrix-table .cell-red { background: #f5e3e4; }
+.daily-matrix-table .cell-purple { background: #d9d6e6; }
+.daily-matrix-table .cell-blue { background: #d5e6f0; }
+.daily-matrix-table .cell-yellow { background: #efe4c3; }
+
+.matrix-cell {
+    width: 100%;
+    min-height: 34px;
+    border: 0;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.2s ease, box-shadow 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.matrix-cell:hover {
+    box-shadow: inset 0 0 0 2px rgba(31, 106, 134, 0.45);
+}
+
+.matrix-cell.is-active {
+    background: rgba(31, 106, 134, 0.28);
+    box-shadow: inset 0 0 0 2px #1f6a86;
+}
+
+.matrix-mark {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+    color: #0f546d;
+    font-size: 1rem;
+    font-weight: 800;
+}
+
+.matrix-cell.is-active .matrix-mark {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.checklist-day-card {
+    background: linear-gradient(180deg, #ffffff 0%, #fcfaf6 100%);
+}
+
+.check-group {
+    border-radius: 12px;
+    padding: 12px;
+    border: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.check-red {
+    background: #fbefef;
+}
+
+.check-purple {
+    background: #f1eff8;
+}
+
+.check-blue {
+    background: #edf6fb;
+}
+
+.check-yellow {
+    background: #faf5e9;
+}
+
+.check-group-title {
+    margin: 0 0 8px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: #1f3243;
+}
+
+.check-items {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+}
+
+.check-item {
+    border: 1px solid rgba(31, 106, 134, 0.2);
+    background: #ffffff;
+    border-radius: 10px;
+    min-height: 42px;
+    padding: 8px 10px;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    transition: transform 0.15s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+}
+
+.check-item:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.08);
+}
+
+.check-item-text {
+    font-size: 0.86rem;
+    line-height: 1.5;
+    color: #234;
+}
+
+.check-item-mark {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #a0b8c5;
+    color: transparent;
+    font-weight: 800;
+    flex-shrink: 0;
+}
+
+.check-item.is-done {
+    background: #d9eff7;
+    border-color: #1f6a86;
+}
+
+.check-item.is-done .check-item-mark {
+    background: #1f6a86;
+    border-color: #1f6a86;
+    color: #fff;
+}
+
+.day-note-wrap {
+    background: #ffffff;
+    border: 1px dashed #c9d7df;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.day-note-label {
+    display: block;
+    font-weight: 700;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    color: #234;
+}
+
+.day-note {
+    width: 100%;
+    border: 1px solid #c9d7df;
+    border-radius: 10px;
+    padding: 10px;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    resize: vertical;
+    min-height: 90px;
+    background: #fcfeff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.day-note:focus {
+    outline: none;
+    border-color: #2d5f8d;
+    box-shadow: 0 0 0 3px rgba(45, 95, 141, 0.16);
+}
+
+.day-note-status {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+}
+
+.matrix-cell.pop-done,
+.check-item.pop-done {
+    animation: popDone 0.22s ease-out;
+}
+
+@keyframes popDone {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+@media (max-width: 768px) {
+    .table-first-10 {
+        font-size: 0.9rem;
+    }
+    .table-first-10 thead th {
+        padding: 10px 8px;
+    }
+    .table-first-10 tbody td {
+        padding: 10px 8px;
+    }
+
+    .check-items {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-goals-banner {
+        min-height: 180px;
+        background-size: 180px 180px;
+    }
+}
