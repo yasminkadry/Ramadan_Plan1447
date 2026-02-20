@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Official Ramadan 2026/1447 AH Strategic Framework for Imams - فَاسْتَقِمْ كَمَا أُمِرْتَ - So be steadfast as you have been commanded">
-    <title>أَوَلَيْسَ أَدْرَكَ رَمَضَانَ - الأَيَّامُ العَشْرُ الأُولَى</title>
+    <meta name="description" content="Official Ramadan 2026/1447 AH website for tracking daily goals and progress during the holy month of Ramadan.">
+    <title>أَوَلَيْسَ أَدْرَكَ رَمَضَانَ</title>
     <link rel="icon" type="image/png" href="Assets/favicon.png">
 
     <!-- Google Fonts - Rubik -->
@@ -22,6 +22,8 @@
     <link rel="stylesheet" href="css/styles.css">
 </head>
 <body>
+
+     <!-- أول شهر رمضان رحمة، وأوسطه مغفرة، وآخره عتق من النار -->
     <!-- Navbar -->
     <nav class="navbar navbar-expand-lg navbar-dark hero-bg sticky-top">
         <div class="container">
@@ -52,14 +54,12 @@
                         <div class="d-flex align-items-center gap-3 mb-3">
                             <div>
                                 <h1 class="h2 h1-md fw-bold mb-0">أَوَلَيْسَ أَدْرَكَ رَمَضَانَ</h1>
-                                <div class="text-warning fw-semibold">الأيّامُ العشرُ الأُولى</div>
                             </div>
                         </div>
 
                         <div class="d-flex flex-wrap gap-2 mb-3">
                             <span class="badge text-bg-warning">1447 هـ</span>
                             <span class="badge text-bg-light text-dark">2026 م</span>
-                            <span class="badge text-bg-dark border border-white border-opacity-25">فَاسْتَقِمْ كَمَاأُمِرْتَ</span>
                         </div>
 
                         <p class="mb-0 opacity-90" style=" font-size:1.5rem;">
@@ -136,23 +136,47 @@
             </div>
         </section>
 
-        <!-- Table of First 10 Days -->
+        <!-- Table of Days -->
         <section class="mb-4" id="table">
             <div class="mb-3">
                 <h2 class="h5 fw-bold mb-0" style=>
-                    <i class="fas fa-calendar-alt text-primary me-2"></i>جَدْوَلُ الأَيَّامِ العَشْرِ الأُولَى مِنْ رَمَضَانَ
+                    <i class="fas fa-calendar-alt text-primary me-2"></i>جَدْوَلُ الأَيَّامِ 
                 </h2>
+            </div>
+              <!-- first ten days table -->
+            <div class="text-center text-white mb-4 border rounded-5 p-3" style="background: linear-gradient(135deg, #018e5c 0%, #9500ff 100%); ">
+                <div class="d-inline-flex align-items-center justify-content-center gap-2">
+                    <h2 class="h5 fw-bold mb-0 text-center">أوله رحمة</h2>
+                </div>
+                <p class="small mb-0 mt-2 text-white">العشر الأوائل من رمضان</p>
             </div>
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                 <div class="p-3 p-md-4">
-                    <p class="text-muted mb-3">اِضْغَطْ عَلَى كُلِّ خَانَةٍ لِتَسْجِيلِ الإِنْجَازِ، وَتُحْفَظُ البَيَانَاتُ تِلْقَائِيًّا.</p>
                     <div class="table-responsive">
                         <table class="daily-matrix-table" id="dailyMatrixTable" dir="rtl">
                             <!-- Populated by JavaScript -->
                         </table>
                     </div>
+                  
                 </div>
             </div>
+
+            <!-- second ten days table  -->
+            <!-- <div class="text-center text-white my-4 border rounded-5 p-3" style="background: linear-gradient(135deg, #0f4c81 0%, #0a9396 100%);">
+                <div class="d-inline-flex align-items-center justify-content-center gap-2">
+                    <h2 class="h5 fw-bold mb-0 text-center">أوسطه مغفرة</h2>
+                </div>
+                <p class="small mb-0 mt-2 text-white">العشر الوسطى من رمضان</p>
+            </div>
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="p-3 p-md-4">
+                    <div class="table-responsive">
+                        <table class="daily-matrix-table" id="dailyMatrixTableNextTen" dir="rtl"> -->
+                            <!-- Populated by JavaScript -->
+                        <!-- </table>
+                    </div>
+                </div>
+            </div>  -->
         </section>
 
         <!-- Calendar Checklist Section -->
@@ -167,7 +191,30 @@
                 <!-- Populated by JavaScript -->
             </div>
         </section>
+
+        <!-- <section class="mb-4">
+            <div class="d-flex align-items-center justify-content-between mb-3">
+                <h2 class="h5 fw-bold mb-0" style=>
+                    <i class="fas fa-check-circle text-info me-2"></i>متابعةٌ يوميّةٌ - الأيّامُ العشرُ الوسطى
+                </h2>
+                <span class="badge text-bg-info">تَتَبُّعٌ</span>
+            </div>
+            <div id="calendarChecklistNextTen" class="row g-4"> -->
+                <!-- Populated by JavaScript -->
+           <!-- </div>
+        </section> -->
+
+
+
     </main>
+
+
+    <div class="text-center text-white mb-4 border rounded-5 p-3" style="background: linear-gradient(135deg, #893030 0%, #2d0101 100%); ">
+        <div class="d-inline-flex align-items-center justify-content-center gap-2">
+            <h2 class="h5 fw-bold mb-0 text-center">ستتم إضافة متابعة الأيام الوسطى في وقت لاحق </h2>
+        </div>
+    </div>
+
 
     <!-- Footer -->
     <footer class="py-4 border-top bg-white">

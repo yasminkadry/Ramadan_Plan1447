@@ -3,11 +3,18 @@ const STORAGE_KEY = 'ramadan_targets_2026';
 const MATRIX_KEY = 'ramadan_matrix_2026';
 const NOTES_KEY = 'ramadan_day_notes_2026';
 
-// 10 Days (for matrix and checklist)
-const ramadanDays = Array.from({ length: 10 }, (_, index) => ({
-    day: index + 1,
-    date: `${index + 1} رَمَضَانَ`
-}));
+function createRamadanDays(startDay, count) {
+    return Array.from({ length: count }, (_, index) => {
+        const day = startDay + index;
+        return {
+            day,
+            date: `${day} رَمَضَانَ`
+        };
+    });
+}
+
+const ramadanDaysFirstTen = createRamadanDays(1, 10);
+const ramadanDaysNextTen = createRamadanDays(11, 10);
 
 // Matrix content based on the provided reference image
 const matrixConfig = {
@@ -77,13 +84,17 @@ const targetsList = document.getElementById('targetsList');
 const clearAllBtn = document.getElementById('clearAllBtn');
 const charCount = document.getElementById('charCount');
 const calendarChecklist = document.getElementById('calendarChecklist');
+const calendarChecklistNextTen = document.getElementById('calendarChecklistNextTen');
 const dailyMatrixTable = document.getElementById('dailyMatrixTable');
+const dailyMatrixTableNextTen = document.getElementById('dailyMatrixTableNextTen');
 
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadTargets();
-    renderDailyMatrix();
-    renderChecklistCalendar();
+    renderDailyMatrix(ramadanDaysFirstTen, dailyMatrixTable);
+    renderDailyMatrix(ramadanDaysNextTen, dailyMatrixTableNextTen);
+    renderChecklistCalendar(ramadanDaysFirstTen, calendarChecklist);
+    renderChecklistCalendar(ramadanDaysNextTen, calendarChecklistNextTen);
     attachEventListeners();
 });
 
@@ -207,8 +218,8 @@ function clearAllTargets() {
 }
 
 // Matrix Rendering
-function renderDailyMatrix() {
-    if (!dailyMatrixTable) {
+function renderDailyMatrix(days, tableElement) {
+    if (!tableElement) {
         return;
     }
 
@@ -234,7 +245,7 @@ function renderDailyMatrix() {
         </thead>
     `;
 
-    const rows = ramadanDays.map((day) => {
+    const rows = days.map((day) => {
         const redCells = matrixConfig.redFlags.map((_, index) =>
             buildMatrixCell(day.day, 'red', index, 'cell-red')
         ).join('');
@@ -257,9 +268,9 @@ function renderDailyMatrix() {
         `;
     }).join('');
 
-    dailyMatrixTable.innerHTML = `${thead}<tbody>${rows}</tbody>`;
+    tableElement.innerHTML = `${thead}<tbody>${rows}</tbody>`;
 
-    attachMatrixToggleEvents(dailyMatrixTable, '.matrix-cell');
+    attachMatrixToggleEvents(tableElement, '.matrix-cell');
 }
 
 function buildMatrixCell(day, group, index, className) {
@@ -282,10 +293,14 @@ function buildMatrixCell(day, group, index, className) {
 }
 
 // Checklist Rendering (same data as matrix) + Daily Notes
-function renderChecklistCalendar() {
-    calendarChecklist.innerHTML = '';
+function renderChecklistCalendar(days, checklistContainer) {
+    if (!checklistContainer) {
+        return;
+    }
 
-    ramadanDays.forEach((day) => {
+    checklistContainer.innerHTML = '';
+
+    days.forEach((day) => {
         const col = document.createElement('div');
         col.className = 'col-12 col-xl-6';
 
@@ -316,11 +331,11 @@ function renderChecklistCalendar() {
         `;
 
         col.appendChild(card);
-        calendarChecklist.appendChild(col);
+        checklistContainer.appendChild(col);
     });
 
-    attachMatrixToggleEvents(calendarChecklist, '.check-item');
-    attachDayNoteEvents();
+    attachMatrixToggleEvents(checklistContainer, '.check-item');
+    attachDayNoteEvents(checklistContainer);
 }
 
 function renderChecklistGroup(day, group) {
@@ -412,8 +427,12 @@ function getMatrixKey(day, group, index) {
 }
 
 // Daily Notes
-function attachDayNoteEvents() {
-    calendarChecklist.querySelectorAll('.day-note').forEach((textarea) => {
+function attachDayNoteEvents(root) {
+    if (!root) {
+        return;
+    }
+
+    root.querySelectorAll('.day-note').forEach((textarea) => {
         textarea.addEventListener('input', () => {
             const day = Number(textarea.dataset.dayNote);
             setDayNote(day, textarea.value);
@@ -431,10 +450,9 @@ function attachDayNoteEvents() {
 }
 
 function setDayNoteStatus(day, text) {
-    const status = calendarChecklist.querySelector(`[data-note-status="${day}"]`);
-    if (status) {
+    document.querySelectorAll(`[data-note-status="${day}"]`).forEach((status) => {
         status.textContent = text;
-    }
+    });
 }
 
 function getNotesData() {
