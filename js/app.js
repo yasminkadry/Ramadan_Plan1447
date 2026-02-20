@@ -1,7 +1,9 @@
 // Local Storage Keys
 const STORAGE_KEY = 'ramadan_targets_2026';
 const MATRIX_KEY = 'ramadan_matrix_2026';
+const MATRIX_TEXT_KEY = 'ramadan_matrix_text_2026';
 const NOTES_KEY = 'ramadan_day_notes_2026';
+const TEXT_INPUT_GROUP_IDS = new Set(['booster', 'helper']);
 
 function createRamadanDays(startDay, count) {
     return Array.from({ length: count }, (_, index) => {
@@ -91,6 +93,7 @@ const dailyMatrixTableNextTen = document.getElementById('dailyMatrixTableNextTen
 // Initialize
 document.addEventListener('DOMContentLoaded', () => {
     loadTargets();
+    syncTextDrivenStatuses([...ramadanDaysFirstTen, ...ramadanDaysNextTen]);
     renderDailyMatrix(ramadanDaysFirstTen, dailyMatrixTable);
     renderDailyMatrix(ramadanDaysNextTen, dailyMatrixTableNextTen);
     renderChecklistCalendar(ramadanDaysFirstTen, calendarChecklist);
@@ -250,8 +253,8 @@ function renderDailyMatrix(days, tableElement) {
             buildMatrixCell(day.day, 'red', index, 'cell-red')
         ).join('');
 
-        const boosterCell = buildMatrixCell(day.day, 'booster', 0, 'cell-purple');
-        const helperCell = buildMatrixCell(day.day, 'helper', 0, 'cell-blue');
+        const boosterCell = buildMatrixTextCell(day.day, 'booster', 0, 'cell-purple');
+        const helperCell = buildMatrixTextCell(day.day, 'helper', 0, 'cell-blue');
 
         const distractorCells = matrixConfig.distractors.map((_, index) =>
             buildMatrixCell(day.day, 'distractor', index, 'cell-yellow')
@@ -271,6 +274,7 @@ function renderDailyMatrix(days, tableElement) {
     tableElement.innerHTML = `${thead}<tbody>${rows}</tbody>`;
 
     attachMatrixToggleEvents(tableElement, '.matrix-cell');
+    attachMatrixTextEvents(tableElement);
 }
 
 function buildMatrixCell(day, group, index, className) {
@@ -288,6 +292,29 @@ function buildMatrixCell(day, group, index, className) {
             >
                 <span class="matrix-mark">✓</span>
             </button>
+        </td>
+    `;
+}
+
+function buildMatrixTextCell(day, group, index, className) {
+    const key = getMatrixKey(day, group, index);
+    const value = getMatrixText(key);
+    const isActive = value.trim().length > 0;
+
+    if (getMatrixStatus(key) !== isActive) {
+        setMatrixStatus(key, isActive);
+    }
+
+    return `
+        <td class="${className}">
+            <input
+                type="text"
+                class="matrix-text-input"
+                data-matrix-text-key="${key}"
+                data-day="${day}"
+                aria-label="Daily input for day ${day}"
+                value="${escapeHtml(value)}"
+            />
         </td>
     `;
 }
@@ -352,14 +379,16 @@ function renderChecklistGroup(day, group) {
 function renderChecklistItem(day, group, index, label, sectionClass) {
     const key = getMatrixKey(day, group, index);
     const isDone = getMatrixStatus(key);
+    const isTextDriven = isTextDrivenKey(key);
 
     return `
         <button
             type="button"
-            class="check-item ${sectionClass} ${isDone ? 'is-done' : ''}"
+            class="check-item ${sectionClass} ${isDone ? 'is-done' : ''} ${isTextDriven ? 'is-text-driven' : ''}"
             data-matrix-key="${key}"
             aria-pressed="${isDone}"
             title="${escapeHtml(label)}"
+            ${isTextDriven ? 'disabled' : ''}
         >
             <span class="check-item-text">${escapeHtml(label)}</span>
             <span class="check-item-mark">✓</span>
@@ -377,7 +406,35 @@ function attachMatrixToggleEvents(root, selector) {
     });
 }
 
+function attachMatrixTextEvents(root) {
+    if (!root) {
+        return;
+    }
+
+    root.querySelectorAll('[data-matrix-text-key]').forEach((input) => {
+        input.addEventListener('input', () => {
+            const key = input.dataset.matrixTextKey;
+            const value = input.value;
+            const wasActive = getMatrixStatus(key);
+            const isActive = value.trim().length > 0;
+            const day = Number(input.dataset.day);
+
+            setMatrixText(key, value);
+
+            if (wasActive !== isActive) {
+                setMatrixStatus(key, isActive);
+                syncMatrixStateForKey(key, isActive);
+                updateDayProgress(day);
+            }
+        });
+    });
+}
+
 function toggleMatrixStatus(key) {
+    if (isTextDrivenKey(key)) {
+        return;
+    }
+
     const next = !getMatrixStatus(key);
     setMatrixStatus(key, next);
     syncMatrixStateForKey(key, next);
@@ -424,6 +481,24 @@ function getDayFromKey(key) {
 
 function getMatrixKey(day, group, index) {
     return `${day}-${group}-${index}`;
+}
+
+function isTextDrivenKey(key) {
+    const parts = key.split('-');
+    const group = parts[1];
+    const index = parts[2];
+
+    return TEXT_INPUT_GROUP_IDS.has(group) && index === '0';
+}
+
+function syncTextDrivenStatuses(days) {
+    days.forEach((dayEntry) => {
+        TEXT_INPUT_GROUP_IDS.forEach((groupId) => {
+            const key = getMatrixKey(dayEntry.day, groupId, 0);
+            const hasValue = getMatrixText(key).trim().length > 0;
+            setMatrixStatus(key, hasValue);
+        });
+    });
 }
 
 // Daily Notes
@@ -486,6 +561,29 @@ function setMatrixStatus(key, isActive) {
     const data = getMatrixData();
     data[key] = isActive;
     localStorage.setItem(MATRIX_KEY, JSON.stringify(data));
+}
+
+function getMatrixTextData() {
+    const stored = localStorage.getItem(MATRIX_TEXT_KEY);
+    return stored ? JSON.parse(stored) : {};
+}
+
+function getMatrixText(key) {
+    const data = getMatrixTextData();
+    return data[key] || '';
+}
+
+function setMatrixText(key, textValue) {
+    const data = getMatrixTextData();
+    const isBlank = textValue.trim().length === 0;
+
+    if (isBlank) {
+        delete data[key];
+    } else {
+        data[key] = textValue;
+    }
+
+    localStorage.setItem(MATRIX_TEXT_KEY, JSON.stringify(data));
 }
 
 // Utility

@@ -234,6 +234,24 @@ h1, h2, h3, h4, h5, h6, .hero-title, [style*="font-family:'Marhey'"] {
     transform: scale(1);
 }
 
+.matrix-text-input {
+    width: 100%;
+    min-height: 34px;
+    border: 1px solid rgba(31, 106, 134, 0.35);
+    border-radius: 8px;
+    background: #fff;
+    padding: 6px 8px;
+    text-align: right;
+    font-size: 0.85rem;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.matrix-text-input:focus {
+    outline: none;
+    border-color: #1f6a86;
+    box-shadow: 0 0 0 2px rgba(31, 106, 134, 0.2);
+}
+
 .checklist-day-card {
     background: linear-gradient(180deg, #ffffff 0%, #fcfaf6 100%);
 }
@@ -320,6 +338,16 @@ h1, h2, h3, h4, h5, h6, .hero-title, [style*="font-family:'Marhey'"] {
     background: #1f6a86;
     border-color: #1f6a86;
     color: #fff;
+}
+
+.check-item.is-text-driven:disabled {
+    opacity: 1;
+    cursor: default;
+}
+
+.check-item.is-text-driven:disabled:hover {
+    transform: none;
+    box-shadow: none;
 }
 
 .day-note-wrap {
